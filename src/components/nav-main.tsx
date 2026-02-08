@@ -1,37 +1,49 @@
-import { IconCirclePlusFilled, IconMail, type Icon } from "@tabler/icons-react";
-
-import { Button } from "@/components/ui/button";
+import { Link, useLocation } from "react-router-dom";
+import { type LucideIcon } from "lucide-react";
 import {
   SidebarGroup,
-  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-export function NavMain({
-  items,
-}: {
+interface NavMainProps {
   items: {
     title: string;
     url: string;
-    icon?: Icon;
+    icon?: LucideIcon | React.ComponentType<{ className?: string }>;
+    isActive?: boolean;
+    items?: {
+      title: string;
+      url: string;
+    }[];
   }[];
-}) {
+}
+
+export function NavMain({ items }: NavMainProps) {
+  const location = useLocation();
+
   return (
     <SidebarGroup>
-      <SidebarGroupContent className="flex flex-col gap-2">
-        <SidebarMenu>
-          {items.map((item) => (
+      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarMenu>
+        {items.map((item) => {
+          const Icon = item.icon;
+          const isActive = location.pathname === item.url;
+
+          return (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
-                {item.icon && <item.icon />}
-                <span>{item.title}</span>
+              <SidebarMenuButton asChild isActive={isActive}>
+                <Link to={item.url}>
+                  {Icon && <Icon className="h-4 w-4" />}
+                  <span>{item.title}</span>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroupContent>
+          );
+        })}
+      </SidebarMenu>
     </SidebarGroup>
   );
 }

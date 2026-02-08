@@ -6,6 +6,10 @@ import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 import data from "./data.json";
+import { ChartPieLabelList } from "@/components/chart-pie-label-list";
+import { RecentProject } from "@/components/recent-project";
+import { TeamActivity } from "@/components/team-activity";
+import { UpcomingDeadlines } from "@/components/upcoming-deadlines";
 
 export default function Dashboard() {
   return (
@@ -24,10 +28,18 @@ export default function Dashboard() {
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <SectionCards />
-              <div className="px-4 lg:px-6">
+              <div className="px-4 lg:px-6 flex gap-5">
                 <ChartAreaInteractive />
+                <ChartPieLabelList />
               </div>
-              <DataTable data={data} />
+              {/* <DataTable data={data} /> */}
+              <div className="px-4 lg:px-6 flex gap-5 w-full">
+                <RecentProject />
+                <TeamActivity />
+              </div>
+              <div className="px-4 lg:px-6">
+                <UpcomingDeadlines />
+              </div>
             </div>
           </div>
         </div>

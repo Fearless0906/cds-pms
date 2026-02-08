@@ -3,6 +3,7 @@ import Dashboard from "./app/dashboard/Dashboard";
 import Login from "./app/auth/Login";
 import SignUp from "./app/auth/SignUp";
 import ForgotPassword from "./app/auth/Forgot-Password";
+import { ProjectBoard } from "./app/project/Project";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
+  },
+  {
+    path: "/project",
+    element: <ProjectBoard />,
   },
 ]);
 
