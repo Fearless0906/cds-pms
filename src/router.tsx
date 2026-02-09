@@ -3,7 +3,8 @@ import Dashboard from "./app/dashboard/Dashboard";
 import Login from "./app/auth/Login";
 import SignUp from "./app/auth/SignUp";
 import ForgotPassword from "./app/auth/Forgot-Password";
-import { ProjectBoard } from "./app/project/Project";
+import Project from "./app/project/Project";
+import Calendar from "./app/calendar/Calendar";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/project",
-    element: <ProjectBoard />,
+    element: <Project />,
+  },
+  {
+    path: "/calendar",
+    element: <Calendar />,
   },
 ]);
 
