@@ -31,6 +31,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Calendar } from "lucide-react";
+import { useSelector } from "react-redux";
+import type { State } from "@/api/store/store";
 
 const data = {
   user: {
@@ -144,7 +146,36 @@ const data = {
   ],
 };
 
+const userData = {
+  first_name: "",
+  last_name: "",
+  email: "",
+  avatar: "",
+};
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user, loading, error } = useSelector((state: State) => state.auth);
+
+  if (loading) {
+    return (
+      <Sidebar collapsible="offcanvas" {...props}>
+        <SidebarHeader>
+          <p className="p-4 text-sm text-muted-foreground">Loading user...</p>
+        </SidebarHeader>
+      </Sidebar>
+    );
+  }
+
+  if (error) {
+    return (
+      <Sidebar collapsible="offcanvas" {...props}>
+        <SidebarHeader>
+          <p className="p-4 text-sm text-red-500">{error}</p>
+        </SidebarHeader>
+      </Sidebar>
+    );
+  }
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -168,7 +199,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user ?? userData} />
       </SidebarFooter>
     </Sidebar>
   );

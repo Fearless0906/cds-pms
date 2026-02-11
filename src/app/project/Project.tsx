@@ -1,4 +1,4 @@
-import { getTasks } from "@/api/apiClient";
+import { getProjects, getTasks } from "@/api/apiClient";
 import { AppSidebar } from "@/components/app-sidebar";
 import ProjectCard from "@/components/project-card";
 import ProjectHeader from "@/components/project-header";
@@ -8,7 +8,7 @@ import ProjectStats from "@/components/project-stats";
 import ProjectToolbar from "@/components/project-toolbar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import type { Column } from "@/lib/types";
+import type { Column, Project } from "@/lib/types";
 import {
   IconCalendar,
   IconChartBar,

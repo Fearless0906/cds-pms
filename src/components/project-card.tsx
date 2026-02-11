@@ -7,141 +7,151 @@ import {
   IconDots,
   IconStar,
   IconCalendar,
-  IconUsers,
   IconFolder,
 } from "@tabler/icons-react";
-
-interface Project {
-  id: string;
-  name: string;
-  description: string;
-  progress: number;
-  status: "On Track" | "At Risk" | "Delayed" | "Completed";
-  dueDate: string;
-  team: Array<{ name: string; avatar: string }>;
-  color: string;
-  tasks: { completed: number; total: number };
-  isFavorite?: boolean;
-}
+import type { Project } from "@/lib/types";
+import { getProjects } from "@/api/apiClient";
+import { useEffect, useState } from "react";
 
 const ProjectCard = () => {
-  const projects: Project[] = [
-    {
-      id: "1",
-      name: "Website Redesign",
-      description: "Complete overhaul of company website with modern UI/UX",
-      progress: 75,
-      status: "On Track",
-      dueDate: "Dec 31, 2024",
-      team: [
-        { name: "JD", avatar: "https://i.pravatar.cc/150?img=1" },
-        { name: "SK", avatar: "https://i.pravatar.cc/150?img=2" },
-        { name: "AL", avatar: "https://i.pravatar.cc/150?img=3" },
-      ],
-      color: "bg-blue-500",
-      tasks: { completed: 18, total: 24 },
-      isFavorite: true,
-    },
-    {
-      id: "2",
-      name: "Mobile App Development",
-      description: "iOS and Android app for customer engagement",
-      progress: 45,
-      status: "At Risk",
-      dueDate: "Jan 15, 2025",
-      team: [
-        { name: "MC", avatar: "https://i.pravatar.cc/150?img=4" },
-        { name: "SR", avatar: "https://i.pravatar.cc/150?img=5" },
-      ],
-      color: "bg-purple-500",
-      tasks: { completed: 9, total: 20 },
-    },
-    {
-      id: "3",
-      name: "Brand Identity Refresh",
-      description: "Update brand guidelines and marketing materials",
-      progress: 90,
-      status: "On Track",
-      dueDate: "Dec 20, 2024",
-      team: [
-        { name: "EM", avatar: "https://i.pravatar.cc/150?img=6" },
-        { name: "JL", avatar: "https://i.pravatar.cc/150?img=7" },
-        { name: "PK", avatar: "https://i.pravatar.cc/150?img=8" },
-        { name: "RW", avatar: "https://i.pravatar.cc/150?img=9" },
-      ],
-      color: "bg-green-500",
-      tasks: { completed: 27, total: 30 },
-      isFavorite: true,
-    },
-    {
-      id: "4",
-      name: "Data Migration",
-      description: "Migrate legacy systems to cloud infrastructure",
-      progress: 30,
-      status: "Delayed",
-      dueDate: "Feb 1, 2025",
-      team: [
-        { name: "DT", avatar: "https://i.pravatar.cc/150?img=10" },
-        { name: "BH", avatar: "https://i.pravatar.cc/150?img=11" },
-      ],
-      color: "bg-orange-500",
-      tasks: { completed: 6, total: 18 },
-    },
-    {
-      id: "5",
-      name: "E-commerce Platform",
-      description: "Build new online store with payment integration",
-      progress: 60,
-      status: "On Track",
-      dueDate: "Jan 30, 2025",
-      team: [
-        { name: "NH", avatar: "https://i.pravatar.cc/150?img=12" },
-        { name: "FG", avatar: "https://i.pravatar.cc/150?img=13" },
-        { name: "TY", avatar: "https://i.pravatar.cc/150?img=14" },
-      ],
-      color: "bg-pink-500",
-      tasks: { completed: 12, total: 20 },
-    },
-    {
-      id: "6",
-      name: "Customer Portal",
-      description: "Self-service portal for customer support and tracking",
-      progress: 85,
-      status: "Completed",
-      dueDate: "Dec 15, 2024",
-      team: [
-        { name: "UI", avatar: "https://i.pravatar.cc/150?img=15" },
-        { name: "OP", avatar: "https://i.pravatar.cc/150?img=16" },
-      ],
-      color: "bg-teal-500",
-      tasks: { completed: 17, total: 17 },
-    },
-    {
-      id: "7",
-      name: "AI Integration",
-      description: "Integrate AI chatbot and automation features",
-      progress: 20,
-      status: "On Track",
-      dueDate: "Mar 1, 2025",
-      team: [{ name: "QW", avatar: "https://i.pravatar.cc/150?img=17" }],
-      color: "bg-cyan-500",
-      tasks: { completed: 4, total: 22 },
-    },
-    {
-      id: "8",
-      name: "Security Audit",
-      description: "Comprehensive security review and improvements",
-      progress: 55,
-      status: "At Risk",
-      dueDate: "Jan 10, 2025",
-      team: [
-        { name: "ER", avatar: "https://i.pravatar.cc/150?img=18" },
-        { name: "AS", avatar: "https://i.pravatar.cc/150?img=19" },
-      ],
-      color: "bg-red-500",
-      tasks: { completed: 11, total: 20 },
-    },
-  ];
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  //   const projects: Project[] = [
+  //     {
+  //       id: "1",
+  //       name: "Website Redesign",
+  //       description: "Complete overhaul of company website with modern UI/UX",
+  //       progress: 75,
+  //       status: "On Track",
+  //       dueDate: "Dec 31, 2024",
+  //       team: [
+  //         { name: "JD", avatar: "https://i.pravatar.cc/150?img=1" },
+  //         { name: "SK", avatar: "https://i.pravatar.cc/150?img=2" },
+  //         { name: "AL", avatar: "https://i.pravatar.cc/150?img=3" },
+  //       ],
+  //       color: "bg-blue-500",
+  //       tasks: { completed: 18, total: 24 },
+  //       isFavorite: true,
+  //     },
+  //     {
+  //       id: "2",
+  //       name: "Mobile App Development",
+  //       description: "iOS and Android app for customer engagement",
+  //       progress: 45,
+  //       status: "At Risk",
+  //       dueDate: "Jan 15, 2025",
+  //       team: [
+  //         { name: "MC", avatar: "https://i.pravatar.cc/150?img=4" },
+  //         { name: "SR", avatar: "https://i.pravatar.cc/150?img=5" },
+  //       ],
+  //       color: "bg-purple-500",
+  //       tasks: { completed: 9, total: 20 },
+  //     },
+  //     {
+  //       id: "3",
+  //       name: "Brand Identity Refresh",
+  //       description: "Update brand guidelines and marketing materials",
+  //       progress: 90,
+  //       status: "On Track",
+  //       dueDate: "Dec 20, 2024",
+  //       team: [
+  //         { name: "EM", avatar: "https://i.pravatar.cc/150?img=6" },
+  //         { name: "JL", avatar: "https://i.pravatar.cc/150?img=7" },
+  //         { name: "PK", avatar: "https://i.pravatar.cc/150?img=8" },
+  //         { name: "RW", avatar: "https://i.pravatar.cc/150?img=9" },
+  //       ],
+  //       color: "bg-green-500",
+  //       tasks: { completed: 27, total: 30 },
+  //       isFavorite: true,
+  //     },
+  //     {
+  //       id: "4",
+  //       name: "Data Migration",
+  //       description: "Migrate legacy systems to cloud infrastructure",
+  //       progress: 30,
+  //       status: "Delayed",
+  //       dueDate: "Feb 1, 2025",
+  //       team: [
+  //         { name: "DT", avatar: "https://i.pravatar.cc/150?img=10" },
+  //         { name: "BH", avatar: "https://i.pravatar.cc/150?img=11" },
+  //       ],
+  //       color: "bg-orange-500",
+  //       tasks: { completed: 6, total: 18 },
+  //     },
+  //     {
+  //       id: "5",
+  //       name: "E-commerce Platform",
+  //       description: "Build new online store with payment integration",
+  //       progress: 60,
+  //       status: "On Track",
+  //       dueDate: "Jan 30, 2025",
+  //       team: [
+  //         { name: "NH", avatar: "https://i.pravatar.cc/150?img=12" },
+  //         { name: "FG", avatar: "https://i.pravatar.cc/150?img=13" },
+  //         { name: "TY", avatar: "https://i.pravatar.cc/150?img=14" },
+  //       ],
+  //       color: "bg-pink-500",
+  //       tasks: { completed: 12, total: 20 },
+  //     },
+  //     {
+  //       id: "6",
+  //       name: "Customer Portal",
+  //       description: "Self-service portal for customer support and tracking",
+  //       progress: 85,
+  //       status: "Completed",
+  //       dueDate: "Dec 15, 2024",
+  //       team: [
+  //         { name: "UI", avatar: "https://i.pravatar.cc/150?img=15" },
+  //         { name: "OP", avatar: "https://i.pravatar.cc/150?img=16" },
+  //       ],
+  //       color: "bg-teal-500",
+  //       tasks: { completed: 17, total: 17 },
+  //     },
+  //     {
+  //       id: "7",
+  //       name: "AI Integration",
+  //       description: "Integrate AI chatbot and automation features",
+  //       progress: 20,
+  //       status: "On Track",
+  //       dueDate: "Mar 1, 2025",
+  //       team: [{ name: "QW", avatar: "https://i.pravatar.cc/150?img=17" }],
+  //       color: "bg-cyan-500",
+  //       tasks: { completed: 4, total: 22 },
+  //     },
+  //     {
+  //       id: "8",
+  //       name: "Security Audit",
+  //       description: "Comprehensive security review and improvements",
+  //       progress: 55,
+  //       status: "At Risk",
+  //       dueDate: "Jan 10, 2025",
+  //       team: [
+  //         { name: "ER", avatar: "https://i.pravatar.cc/150?img=18" },
+  //         { name: "AS", avatar: "https://i.pravatar.cc/150?img=19" },
+  //       ],
+  //       color: "bg-red-500",
+  //       tasks: { completed: 11, total: 20 },
+  //     },
+  //   ];
+
+  useEffect(() => {
+    // Fetch projects from API and set state
+    const fetchProjects = async () => {
+      try {
+        const response = await getProjects();
+        if (!response.ok) {
+          throw new Error("Failed to fetch projects");
+        }
+        const data = await response.json();
+        console.log(data);
+        setProjects(data);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   const getStatusColor = (status: Project["status"]) => {
     switch (status) {
