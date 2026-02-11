@@ -20,7 +20,7 @@ interface ProjectKanbanProps {
 }
 
 const ProjectKanban = ({
-  columns,
+  columns = [],
   onAddTask,
   onTaskClick,
 }: ProjectKanbanProps) => {
@@ -29,7 +29,7 @@ const ProjectKanban = ({
       <div className="flex-1 overflow-hidden bg-linear-to-br from-gray-50 to-gray-100">
         <div className="h-full overflow-x-auto overflow-y-hidden px-4 lg:px-6 py-4">
           <div className="inline-flex gap-4 h-full min-w-full">
-            {columns.map((column) => (
+            {(columns || []).map((column) => (
               <div
                 key={column.id}
                 className="w-80 shrink-0 flex flex-col h-full"
@@ -64,7 +64,7 @@ const ProjectKanban = ({
 
                 {/* Tasks - Vertical Scroll Container */}
                 <div className="flex-1 space-y-3 overflow-y-auto pr-1">
-                  {column.tasks.map((task) => (
+                  {(column.tasks || []).map((task) => (
                     <Card
                       key={task.id}
                       className="group hover:shadow-lg transition-all duration-200 cursor-pointer border hover:border-gray-300"
@@ -77,14 +77,14 @@ const ProjectKanban = ({
                             <div className="flex items-center gap-2 mb-2 flex-wrap">
                               <Badge
                                 variant="secondary"
-                                className={`${task.categoryColor} text-xs font-medium`}
+                                className={`${task.category_color} text-xs font-medium`}
                               >
                                 {task.category}
                               </Badge>
                               {task.priority && (
                                 <Badge
                                   variant="secondary"
-                                  className={`${task.priorityColor} text-xs font-medium`}
+                                  className={`${task.priority_color} text-xs font-medium`}
                                 >
                                   {task.priority}
                                 </Badge>
@@ -102,7 +102,7 @@ const ProjectKanban = ({
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                            className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
                           >
                             <IconDots className="h-4 w-4" />
                           </Button>
@@ -128,7 +128,7 @@ const ProjectKanban = ({
                         {/* Task Footer */}
                         <div className="flex items-center justify-between mt-3 pt-3 border-t gap-2">
                           <div className="flex -space-x-2 shrink-0">
-                            {task.assignees.map((assignee, idx) => (
+                            {(task.assignees || []).map((assignee, idx) => (
                               <Avatar
                                 key={idx}
                                 className="h-7 w-7 border-2 border-white"
@@ -147,13 +147,13 @@ const ProjectKanban = ({
                                 <span>{task.comments}</span>
                               </div>
                             )}
-                            {task.dueDate && (
+                            {task.due_date && (
                               <div className="flex items-center gap-1 text-xs">
                                 <IconCalendarEvent className="h-4 w-4" />
-                                <span>{task.dueDate}</span>
+                                <span>{task.due_date}</span>
                               </div>
                             )}
-                            {task.isCompleted && (
+                            {task.is_completed && (
                               <div className="flex items-center gap-1 text-emerald-600">
                                 <IconCheck className="h-4 w-4" />
                               </div>

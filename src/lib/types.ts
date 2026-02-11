@@ -1,16 +1,25 @@
+export interface Assignee {
+  id?: string; // from API
+  name: string;
+  avatar: string;
+}
+
 export interface Task {
   id: string;
   title: string;
   description: string;
   category: string;
-  categoryColor: string;
+  category_color: string;
   priority?: "High" | "Medium" | "Low";
-  priorityColor?: string;
+  prority_color?: string;
   progress?: number;
-  assignees: Array<{ name: string; avatar: string }>;
+  assignees: Assignee[];
+  column: string;
   comments?: number;
-  dueDate?: string;
-  isCompleted?: boolean;
+  due_date?: string;
+  is_completed?: boolean;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface Column {
@@ -19,6 +28,8 @@ export interface Column {
   count: number;
   color: string;
   tasks: Task[];
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface CalendarEvent {

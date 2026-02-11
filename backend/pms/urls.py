@@ -1,11 +1,12 @@
 from django.urls import path
-from .views import TaskListCreateView, TaskDetailView
+from .views import TaskListCreateView, TaskDetailView, ColumnListCreateView, ProjectListCreateView, ProjectDetailView
 
 
 urlpatterns = [
-    # List all tasks / Create task
+    path("projects/", ProjectListCreateView.as_view()),
+    path("projects/<int:pk>/", ProjectDetailView.as_view()),
+    path("columns/", ColumnListCreateView.as_view(), name="column-list-create"),
     path("tasks/", TaskListCreateView.as_view(), name="task-list-create"),
-    # Get / Update / Delete single task
     path("tasks/<int:pk>/", TaskDetailView.as_view(), name="task-detail"),
 
 ]
